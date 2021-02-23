@@ -1,20 +1,27 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
+import { ApiModule } from '@/api.module';
 import { AppModule } from '@/app.module';
-import { apiConfig, apiServer, swaggerConfig, swaggerServer } from '@/servers';
+import { apiConfig, apiServer, swaggerConfig, swaggerServer, appServer, appConfig } from '@/servers';
 
 async function bootstrap() {
   const logger = new Logger('bootstrap');
+  const api = await NestFactory.create(ApiModule);
   const app = await NestFactory.create(AppModule);
 
-  apiServer(app);
-  swaggerServer(app);
+  apiServer(api);
+  swaggerServer(api);
+  appServer(app);
 
-  const { host, port, prefix: apiPrefix } = apiConfig;
+  const { host: apiHost, port: apiPort, prefix: apiPrefix } = apiConfig;
   const { prefix: swaggerPrefix } = swaggerConfig;
-  await app.listen(port);
+  const { host: appHost, port: appPort } = appConfig;
 
-  logger.debug(`Appliation listening on: http://${host}:${port}/${apiPrefix}`);
-  logger.debug(`Appliation listening on: http://${host}:${port}/${swaggerPrefix}`);
+  await api.listen(apiPort);
+  await app.listen(appPort);
+
+  logger.debug(`Appliation listening on: http://${apiHost}:${apiPort}/${apiPrefix}`);
+  logger.debug(`Appliation listening on: http://${apiHost}:${apiPort}/${swaggerPrefix}`);
+  logger.debug(`Appliation listening on: http://${appHost}:${appPort}/`);
 }
 bootstrap();
