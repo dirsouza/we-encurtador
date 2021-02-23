@@ -9,7 +9,7 @@ export interface IApiConfig {
   prefix: string;
 }
 
-export const apiConfig: IApiConfig = config.get('server');
+export const apiConfig: IApiConfig = config.get('api');
 
 export const apiServer = (app: INestApplication) => {
   app.setGlobalPrefix(apiConfig.prefix);
