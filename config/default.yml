@@ -2,3 +2,9 @@ server:
   host: localhost
   port: 3000
   prefix: api/v1
+
+swagger:
+  title: API RESTful Encurtador
+  description: API RESTful Encurtador de URL
+  version: 0.0.1
+  prefix: api/v1/doc
